@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "net.nanaky.frost_lava_walker.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "mixins": [
+    "FrostWalkerEnchantmentMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
