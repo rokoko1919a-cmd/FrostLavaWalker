@@ -43,53 +43,22 @@ public class LavaWalkerEnchantmentLogic {
         CONVERSION_START.entrySet().removeIf(e -> now - e.getValue() >= TOTAL_LIFECYCLE_TICKS + 20);
     }
 
-    // On server start / player login, call this for the level:
-    public static void resumePendingBlocks(ServerLevel level) {
+    public static void revertAllPendingToLava(ServerLevel level) {
         LavaWalkerPersistentState state = LavaWalkerPersistentState.get(level);
-        long now = level.getGameTime();
-        long nowMs = System.currentTimeMillis();
-
-        state.startTimes.entrySet().removeIf(entry -> {
-            BlockPos pos = entry.getKey();
-            long startMs = entry.getValue();
-            long elapsedTicks = (nowMs - startMs) / 50L; // 50ms per tick
-
-            if (elapsedTicks >= TOTAL_LIFECYCLE_TICKS) {
-                // Lifecycle already over, just restore lava
-                level.setBlock(pos, Blocks.LAVA.defaultBlockState(), 3);
-                LavaWalkerEnchantmentLogic.killDroppedItems(level, pos);
-                return true; // remove from map
-            }
-
-            // Re-anchor start in game ticks for the in-memory map
-            long fakestart = now - elapsedTicks;
-            LavaWalkerEnchantmentLogic.CONVERSION_START.put(pos, fakestart);
-
-            // Figure out current phase and re-queue from here
+        for (BlockPos pos : new java.util.HashSet<>(state.startTimes.keySet())) {
             BlockState current = level.getBlockState(pos);
-            reQueueFromCurrentState(level, pos, current, fakestart, now);
-            return false;
-        });
-
-        state.setDirty();
-    }
-
-    private static void reQueueFromCurrentState(ServerLevel level, BlockPos pos, BlockState current, long start, long now) {
-        // work out which phase it's in and schedule the next transition
-        if (current.is(Blocks.GILDED_BLACKSTONE)) {
-            long target = start + GILDED_INITIAL_TICKS;
-            BlockConversionScheduler.schedule(pos, Blocks.BLACKSTONE.defaultBlockState(),
-                (int) Math.max(1, target - now), now, null);
-        } else if (current.is(Blocks.BLACKSTONE)) {
-            long target = start + GILDED_INITIAL_TICKS + BLACKSTONE_MAIN_TICKS;
-            BlockConversionScheduler.schedule(pos, Blocks.GILDED_BLACKSTONE.defaultBlockState(),
-                (int) Math.max(1, target - now), now, null);
-        } else if (current.is(Blocks.MAGMA_BLOCK)) {
-            long target = start + GILDED_INITIAL_TICKS + BLACKSTONE_MAIN_TICKS + GILDED_WARNING_TICKS;
-            BlockConversionScheduler.schedule(pos, getLavaBlockState(pos, level),
-                (int) Math.max(1, target - now), now, null);
+            if (current.is(Blocks.GILDED_BLACKSTONE)
+            || current.is(Blocks.BLACKSTONE)
+            || current.is(Blocks.MAGMA_BLOCK)) {
+                level.setBlock(pos, Blocks.LAVA.defaultBlockState(), 3);
+                killDroppedItems(level, pos);
+            }
+            BlockConversionScheduler.cancel(pos, level);
+            CONVERSION_START.remove(pos);
+            CONVERSION_COOLDOWN.remove(pos);
         }
-        // if it's already lava or air, nothing to do
+        state.startTimes.clear();
+        state.setDirty();
     }
 
     public static void onEntityStep(ServerLevel level, LivingEntity entity) {
@@ -107,16 +76,16 @@ public class LavaWalkerEnchantmentLogic {
         }
         if (enchantLevel <= 0) return;
 
-        // Only act when entity is walking ON lava, not swimming IN it
         if (entity.isInLava()) return;
 
         BlockPos center = entity.blockPosition();
+        BlockPos floor = entity.getOnPos();
         int radius = enchantLevel;
         long now = level.getGameTime();
 
         for (BlockPos candidate : BlockPos.betweenClosed(
-                center.offset(-radius, -1, -radius),
-                center.offset(radius, -1, radius))) {
+                new BlockPos(center.getX() - radius, floor.getY(), center.getZ() - radius),
+                new BlockPos(center.getX() + radius, floor.getY(), center.getZ() + radius))) {
 
             if (center.distSqr(candidate) > (radius + 0.5) * (radius + 0.5)) continue;
 
@@ -147,7 +116,8 @@ public class LavaWalkerEnchantmentLogic {
                 Blocks.BLACKSTONE.defaultBlockState(),
                 GILDED_INITIAL_TICKS,
                 level.getGameTime(),
-                entity
+                entity,
+                level
             );
         }
     }
@@ -164,7 +134,7 @@ public class LavaWalkerEnchantmentLogic {
             long warnAt  = START + GILDED_INITIAL_TICKS + BLACKSTONE_MAIN_TICKS;
             long delayTo = Math.max(1, warnAt - now);
             BlockConversionScheduler.schedule(pos, Blocks.GILDED_BLACKSTONE.defaultBlockState(),
-                (int) delayTo, now, entity);
+                (int) delayTo, now, entity, level);
             return;
         }
 
@@ -175,7 +145,7 @@ public class LavaWalkerEnchantmentLogic {
             long magmaAt = START + GILDED_INITIAL_TICKS + BLACKSTONE_MAIN_TICKS + GILDED_WARNING_TICKS;
             long delayTo = Math.max(1, magmaAt - now);
             BlockConversionScheduler.schedule(pos, Blocks.MAGMA_BLOCK.defaultBlockState(),
-                (int) delayTo, now, entity);
+                (int) delayTo, now, entity, level);
             return;
         }
 
@@ -186,7 +156,7 @@ public class LavaWalkerEnchantmentLogic {
             long lavaAt  = START + GILDED_INITIAL_TICKS + BLACKSTONE_MAIN_TICKS + GILDED_WARNING_TICKS + MAGMA_SHORT_TICKS;
             long delayTo = Math.max(1, lavaAt - now);
             BlockConversionScheduler.schedule(pos, getLavaBlockState(pos, level),
-                (int) delayTo, now, entity);
+                (int) delayTo, now, entity, level);
             return;
         }
 

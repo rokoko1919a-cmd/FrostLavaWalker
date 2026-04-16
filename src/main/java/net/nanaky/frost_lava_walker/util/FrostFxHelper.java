@@ -23,7 +23,6 @@ public class FrostFxHelper {
 
     private static final int FREEZE_DETECT_WINDOW = 2;
 
-    // entityId -> (BlockPos -> gametime when it was last seen as water)
     private static final Map<Integer, Map<BlockPos, Long>> waterTimestamps = new HashMap<>();
 
     public static void onEntityStep(ServerLevel level, LivingEntity entity) {
@@ -46,16 +45,16 @@ public class FrostFxHelper {
 
         long now = level.getGameTime();
         BlockPos center = entity.blockPosition();
+        BlockPos floor = entity.getOnPos();
         int radius = 2 + enchantLevel;
 
         Map<BlockPos, Long> timestamps = waterTimestamps.computeIfAbsent(
             entity.getId(), k -> new HashMap<>()
         );
 
-        // Scan radius for water and ice
         for (BlockPos candidate : BlockPos.betweenClosed(
-                center.offset(-radius, -1, -radius),
-                center.offset(radius, -1, radius))) {
+            new BlockPos(center.getX() - radius, floor.getY(), center.getZ() - radius),
+            new BlockPos(center.getX() + radius, floor.getY(), center.getZ() + radius))) {
 
             if (center.distSqr(candidate) > (radius + 0.5) * (radius + 0.5)) continue;
 
@@ -63,21 +62,18 @@ public class FrostFxHelper {
 
             if (level.getFluidState(immutable).is(Fluids.WATER)
                     && level.getFluidState(immutable).isSource()) {
-                // Record or refresh the last-seen-as-water timestamp
                 timestamps.put(immutable, now);
 
             } else if (level.getBlockState(immutable).is(Blocks.FROSTED_ICE)
                     || level.getBlockState(immutable).is(Blocks.ICE)) {
                 Long seenAt = timestamps.get(immutable);
                 if (seenAt != null && (now - seenAt) <= FREEZE_DETECT_WINDOW) {
-                    // Was water recently, is now ice — confirmed freeze
                     spawnIceFx(level, immutable);
-                    timestamps.remove(immutable); // don't fire again for this block
+                    timestamps.remove(immutable);
                 }
             }
         }
 
-        // Evict stale entries (older than window, no longer water or ice)
         Iterator<Map.Entry<BlockPos, Long>> it = timestamps.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry<BlockPos, Long> entry = it.next();
