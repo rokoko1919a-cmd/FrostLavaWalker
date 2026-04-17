@@ -4,6 +4,11 @@ import net.nanaky.frost_lava_walker.util.Particle_Compat;
 import net.nanaky.frost_lava_walker.particle.LavaWalkerParticles;
 import net.nanaky.frost_lava_walker.util.BlockConversionScheduler;
 import net.nanaky.frost_lava_walker.util.LavaWalkerPersistentState;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -33,6 +38,7 @@ public class LavaWalkerEnchantmentLogic {
 
     static final java.util.Map<BlockPos, Long> CONVERSION_COOLDOWN = new java.util.HashMap<>();
     static final java.util.Map<BlockPos, Long> CONVERSION_START = new java.util.HashMap<>();
+    private static final java.util.Map<java.util.UUID, BlockPos> LAST_POS = new java.util.HashMap<>();
 
     private static BlockState getLavaBlockState(BlockPos pos, ServerLevel level) {
         return Blocks.LAVA.defaultBlockState();
@@ -74,11 +80,18 @@ public class LavaWalkerEnchantmentLogic {
             System.err.println("[LavaWalker] enchant lookup failed: " + e);
             return;
         }
-        if (enchantLevel <= 0) return;
-
-        if (entity.isInLava()) return;
 
         BlockPos center = entity.blockPosition();
+        BlockPos last = LAST_POS.put(entity.getUUID(), center);
+        boolean movedBlock = last != null && !last.equals(center);
+        boolean justLanded = entity.onGround() && entity.fallDistance > 0;
+        
+        // NO TRIGGER IF NO ENCHANTMENT, NOT MOVING, IN LAVA OR IN THE AIR
+        if (enchantLevel <= 0) return;
+        if (!movedBlock && !justLanded) return;
+        if (entity.isInLava()) return;
+        if (!entity.onGround()) return;
+
         BlockPos floor = entity.getOnPos();
         int radius = enchantLevel;
         long now = level.getGameTime();
