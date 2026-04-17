@@ -16,7 +16,8 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": ["net.nanaky.frost_lava_walker.LavaWalkerMod"],
-    	"client": ["net.nanaky.frost_lava_walker.LavaWalkerClient"]
+    	"client": ["net.nanaky.frost_lava_walker.LavaWalkerClient"],
+    	"modmenu": ["net.nanaky.frost_lava_walker.client.ModMenuIntegration"]
 	},
 	"mixins": [
 		"frost_lava_walker.mixins.json"
@@ -28,6 +29,7 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"eg_particle_interactions": "*"
+		"modmenu": "*",
+		"cloth-config": "*"
 	}
 }

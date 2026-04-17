@@ -1,0 +1,32 @@
+{
+  "config.frost_lava_walker.title": "Frost Lava Walker – 配置",
+  "config.frost_lava_walker.category.client": "客户端",
+  "config.frost_lava_walker.category.server": "服务器",
+
+  "config.frost_lava_walker.show_particles": "显示粒子",
+  "config.frost_lava_walker.show_particles.tooltip": "在方块转换时显示粒子。卡顿时可关闭。",
+
+  "config.frost_lava_walker.play_sound_effects": "播放音效",
+  "config.frost_lava_walker.play_sound_effects.tooltip": "在方块转换时播放音效。卡顿时可关闭。",
+
+  "config.frost_lava_walker.lava_walker_enabled": "Activation Lava Walker",
+  "config.frost_lava_walker.lava_walker_enabled.tooltip": "启用或禁用 Lava Walker。",
+
+  "config.frost_lava_walker.base_radius": "基础半径",
+  "config.frost_lava_walker.base_radius.tooltip": "Lava Walker 半径（方块）。附魔等级会叠加。",
+
+  "config.frost_lava_walker.gilded_initial_ticks": "阶段1 - 镶金黑石",
+  "config.frost_lava_walker.gilded_initial_ticks.tooltip": "初始阶段持续时间（ticks）。",
+
+  "config.frost_lava_walker.blackstone_main_ticks": "阶段2 - 黑石",
+  "config.frost_lava_walker.blackstone_main_ticks.tooltip": "主要稳定阶段持续时间（ticks）。",
+
+  "config.frost_lava_walker.gilded_warning_ticks": "阶段3 - 镶金黑石",
+  "config.frost_lava_walker.gilded_warning_ticks.tooltip": "转换前的警告阶段（ticks）。",
+
+  "config.frost_lava_walker.magma_short_ticks": "阶段4 - 岩浆块",
+  "config.frost_lava_walker.magma_short_ticks.tooltip": "岩浆阶段持续时间（ticks）。",
+
+  "config.frost_lava_walker.cooldown_extra_ticks": "Cooldown",
+  "config.frost_lava_walker.cooldown_extra_ticks.tooltip": "无法再次转换熔岩的 ticks 时间。"
+}

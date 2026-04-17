@@ -1,0 +1,32 @@
+{
+  "config.frost_lava_walker.title": "Frost Lava Walker – 설정",
+  "config.frost_lava_walker.category.client": "클라이언트",
+  "config.frost_lava_walker.category.server": "서버",
+
+  "config.frost_lava_walker.show_particles": "파티클 표시",
+  "config.frost_lava_walker.show_particles.tooltip": "블록 변환 시 파티클을 표시합니다. 렉이 발생하면 비활성화하세요.",
+
+  "config.frost_lava_walker.play_sound_effects": "사운드 효과 재생",
+  "config.frost_lava_walker.play_sound_effects.tooltip": "블록 변환 시 사운드를 재생합니다. 렉이 발생하면 비활성화하세요.",
+
+  "config.frost_lava_walker.lava_walker_enabled": "Activation Lava Walker",
+  "config.frost_lava_walker.lava_walker_enabled.tooltip": "Lava Walker 활성화/비활성화.",
+
+  "config.frost_lava_walker.base_radius": "기본 반경",
+  "config.frost_lava_walker.base_radius.tooltip": "Lava Walker 반경(블록). 인챈트 레벨이 추가됩니다.",
+
+  "config.frost_lava_walker.gilded_initial_ticks": "페이즈 1 - Gilded Blackstone",
+  "config.frost_lava_walker.gilded_initial_ticks.tooltip": "초기 단계 지속 시간 (ticks).",
+
+  "config.frost_lava_walker.blackstone_main_ticks": "페이즈 2 - Blackstone",
+  "config.frost_lava_walker.blackstone_main_ticks.tooltip": "안정된 메인 단계 지속 시간 (ticks).",
+
+  "config.frost_lava_walker.gilded_warning_ticks": "페이즈 3 - Gilded Blackstone",
+  "config.frost_lava_walker.gilded_warning_ticks.tooltip": "변환 전 경고 단계 (ticks).",
+
+  "config.frost_lava_walker.magma_short_ticks": "페이즈 4 - Magma Block",
+  "config.frost_lava_walker.magma_short_ticks.tooltip": "마그마 단계 지속 시간 (ticks).",
+
+  "config.frost_lava_walker.cooldown_extra_ticks": "Cooldown",
+  "config.frost_lava_walker.cooldown_extra_ticks.tooltip": "재변환이 불가능한 쿨다운 시간 (ticks)."
+}

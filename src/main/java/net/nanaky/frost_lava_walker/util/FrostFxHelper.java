@@ -12,6 +12,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.Vec3;
+import net.nanaky.frost_lava_walker.config.ConfigManager;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,7 +69,8 @@ public class FrostFxHelper {
                     || level.getBlockState(immutable).is(Blocks.ICE)) {
                 Long seenAt = timestamps.get(immutable);
                 if (seenAt != null && (now - seenAt) <= FREEZE_DETECT_WINDOW) {
-                    spawnIceFx(level, immutable);
+                    spawnIceVFX(level, immutable);
+                    spawnIceSFX(level, immutable);
                     timestamps.remove(immutable);
                 }
             }
@@ -87,13 +89,17 @@ public class FrostFxHelper {
         waterTimestamps.remove(entity.getId());
     }
 
-    private static void spawnIceFx(ServerLevel level, BlockPos pos) {
+    private static void spawnIceVFX(ServerLevel level, BlockPos pos) {
+        if (!ConfigManager.INSTANCE.showParticles) return;
         Vec3 center = Vec3.atCenterOf(pos);
         level.sendParticles(
             ParticleTypes.SNOWFLAKE,
             center.x, center.y + 0.4, center.z,
             3, 0.3, 0.05, 0.3, 0.05
         );
+    }
+    private static void spawnIceSFX(ServerLevel level, BlockPos pos) {
+        if (!ConfigManager.INSTANCE.playSoundEffects) return;
         level.playSound(
             null, pos,
             SoundEvents.SNOW_GOLEM_HURT,

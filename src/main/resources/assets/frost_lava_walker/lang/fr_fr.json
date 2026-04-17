@@ -1,0 +1,32 @@
+{
+  "config.frost_lava_walker.title": "Frost Lava Walker – Configuration",
+  "config.frost_lava_walker.category.client": "Client",
+  "config.frost_lava_walker.category.server": "Serveur",
+
+  "config.frost_lava_walker.show_particles": "Afficher les particules",
+  "config.frost_lava_walker.show_particles.tooltip": "Affichées lors de la conversion des blocs. Désactivez si ça lague.",
+
+  "config.frost_lava_walker.play_sound_effects": "Jouer les effets sonores",
+  "config.frost_lava_walker.play_sound_effects.tooltip": "Joués lors de la conversion des blocs. Désactivez si ça lague.",
+
+  "config.frost_lava_walker.lava_walker_enabled": "Activation Lava Walker",
+  "config.frost_lava_walker.lava_walker_enabled.tooltip": "Active ou désactive Lava Walker.",
+
+  "config.frost_lava_walker.base_radius": "Rayon de base",
+  "config.frost_lava_walker.base_radius.tooltip": "Rayon de Lava Walker en blocs. Le niveau de Semelles givrantes s'ajoute à cette valeur.",
+
+  "config.frost_lava_walker.gilded_initial_ticks": "Phase 1 - Roche noire dorée",
+  "config.frost_lava_walker.gilded_initial_ticks.tooltip": "Durée de la première phase (flash).",
+
+  "config.frost_lava_walker.blackstone_main_ticks": "Phase 2 - Roche noire",
+  "config.frost_lava_walker.blackstone_main_ticks.tooltip": "Durée de la phase stable principale.",
+
+  "config.frost_lava_walker.gilded_warning_ticks": "Phase 3 - Roche noire dorée",
+  "config.frost_lava_walker.gilded_warning_ticks.tooltip": "Phase d'avertissement avant reconversion.",
+
+  "config.frost_lava_walker.magma_short_ticks": "Phase 4 - Bloc de magma",
+  "config.frost_lava_walker.magma_short_ticks.tooltip": "Durée de la phase Magma.",
+
+  "config.frost_lava_walker.cooldown_extra_ticks": "Cooldown",
+  "config.frost_lava_walker.cooldown_extra_ticks.tooltip": "Ticks pendant lesquelles la lave ne peut plus être reconvertie."
+}

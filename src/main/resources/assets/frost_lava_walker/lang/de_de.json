@@ -1,0 +1,32 @@
+{
+  "config.frost_lava_walker.title": "Frost Lava Walker – Konfiguration",
+  "config.frost_lava_walker.category.client": "Client",
+  "config.frost_lava_walker.category.server": "Server",
+
+  "config.frost_lava_walker.show_particles": "Partikel anzeigen",
+  "config.frost_lava_walker.show_particles.tooltip": "Partikel bei Blockumwandlung anzeigen. Deaktivieren bei Lags.",
+
+  "config.frost_lava_walker.play_sound_effects": "Soundeffekte abspielen",
+  "config.frost_lava_walker.play_sound_effects.tooltip": "Soundeffekte bei Blockumwandlung abspielen. Deaktivieren bei Lags.",
+
+  "config.frost_lava_walker.lava_walker_enabled": "Lava Walker Aktivierung",
+  "config.frost_lava_walker.lava_walker_enabled.tooltip": "Aktiviert oder deaktiviert Lava Walker.",
+
+  "config.frost_lava_walker.base_radius": "Basisradius",
+  "config.frost_lava_walker.base_radius.tooltip": "Radius von Lava Walker in Blöcken. Verzauberungsstufe wird hinzugefügt.",
+
+  "config.frost_lava_walker.gilded_initial_ticks": "Phase 1 - Golddurchzogener Schwarzstein",
+  "config.frost_lava_walker.gilded_initial_ticks.tooltip": "Dauer der ersten Phase.",
+
+  "config.frost_lava_walker.blackstone_main_ticks": "Phase 2 - Schwarzstein",
+  "config.frost_lava_walker.blackstone_main_ticks.tooltip": "Dauer der stabilen Hauptphase.",
+
+  "config.frost_lava_walker.gilded_warning_ticks": "Phase 3 - Golddurchzogener Schwarzstein",
+  "config.frost_lava_walker.gilded_warning_ticks.tooltip": "Warnphase vor erneuter Umwandlung.",
+
+  "config.frost_lava_walker.magma_short_ticks": "Phase 4 - Magmablock",
+  "config.frost_lava_walker.magma_short_ticks.tooltip": "Dauer der Magma-Phase.",
+
+  "config.frost_lava_walker.cooldown_extra_ticks": "Cooldown",
+  "config.frost_lava_walker.cooldown_extra_ticks.tooltip": "Ticks, in denen Lava nicht erneut umgewandelt werden kann."
+}

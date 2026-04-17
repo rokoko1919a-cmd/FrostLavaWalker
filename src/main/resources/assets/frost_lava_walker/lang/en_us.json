@@ -1,0 +1,32 @@
+{
+    "config.frost_lava_walker.title": "Frost Lava Walker – Config",
+    "config.frost_lava_walker.category.client": "Client",
+    "config.frost_lava_walker.category.server": "Server",
+
+    "config.frost_lava_walker.show_particles": "Show Particles",
+    "config.frost_lava_walker.show_particles.tooltip": "Show particles for block conversion. Disable if you experience lag.",
+
+    "config.frost_lava_walker.play_sound_effects": "Play Sound Effects",
+    "config.frost_lava_walker.play_sound.tooltip": "Play sound effects for block conversion. Disable if you experience lag.",
+
+    "config.frost_lava_walker.lava_walker_enabled": "Lava Walker Enabled",
+    "config.frost_lava_walker.lava_walker_enabled.tooltip": "Toggle Lava Walker. Disable to remove the mechanic entirely.",
+
+    "config.frost_lava_walker.base_radius": "Base Radius",
+    "config.frost_lava_walker.base_radius.tooltip": "Lava Walker Radius in blocks. Enchantment level is added on top. Set to 0 so only Frost Walker II allows Lava Walk.",
+
+    "config.frost_lava_walker.gilded_initial_ticks": "Phase 1 - Flash",
+    "config.frost_lava_walker.gilded_initial_ticks.tooltip": "Duration of the initial Gilded Blackstone Flash.",
+
+    "config.frost_lava_walker.blackstone_main_ticks": "Phase 2 - Solid",
+    "config.frost_lava_walker.blackstone_main_ticks.tooltip": "Duration of the main safe Blackstone Phase. Longest by default.",
+
+    "config.frost_lava_walker.gilded_warning_ticks": "Phase 3 - Warning",
+    "config.frost_lava_walker.gilded_warning_ticks.tooltip": "Duration of the first Warning Phase (Gilded Blackstone again).",
+
+    "config.frost_lava_walker.magma_short_ticks": "Phase 4 - Magma",
+    "config.frost_lava_walker.magma_short_ticks.tooltip": "Duration of the Magma Block Phase.",
+
+    "config.frost_lava_walker.cooldown_extra_ticks": "Cooldown",
+    "config.frost_lava_walker.cooldown_extra_ticks.tooltip": "Extra Ticks during which Lava cannot be reconverted. Set to 0 to disable."
+}

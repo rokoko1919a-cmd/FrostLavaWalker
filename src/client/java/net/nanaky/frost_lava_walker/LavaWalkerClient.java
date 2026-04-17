@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleProviderRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.nanaky.frost_lava_walker.config.ConfigManager;
 import net.nanaky.frost_lava_walker.network.SpawnParticlePacket;
 import net.nanaky.frost_lava_walker.particle.LavaPopParticle;
 import net.nanaky.frost_lava_walker.particle.LavaWalkerParticles;

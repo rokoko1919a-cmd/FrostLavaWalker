@@ -1,0 +1,32 @@
+{
+  "config.frost_lava_walker.title": "Frost Lava Walker – 設定",
+  "config.frost_lava_walker.category.client": "クライアント",
+  "config.frost_lava_walker.category.server": "サーバー",
+
+  "config.frost_lava_walker.show_particles": "パーティクル表示",
+  "config.frost_lava_walker.show_particles.tooltip": "ブロック変換時にパーティクルを表示します。ラグ時は無効化してください。",
+
+  "config.frost_lava_walker.play_sound_effects": "サウンド効果を再生",
+  "config.frost_lava_walker.play_sound_effects.tooltip": "ブロック変換時に音を再生します。ラグ時は無効化してください。",
+
+  "config.frost_lava_walker.lava_walker_enabled": "Activation Lava Walker",
+  "config.frost_lava_walker.lava_walker_enabled.tooltip": "Lava Walker を有効/無効にします。",
+
+  "config.frost_lava_walker.base_radius": "基本半径",
+  "config.frost_lava_walker.base_radius.tooltip": "Lava Walker の半径（ブロック単位）。エンチャントレベルが加算されます。",
+
+  "config.frost_lava_walker.gilded_initial_ticks": "フェーズ1 - きらめくブラックストーン",
+  "config.frost_lava_walker.gilded_initial_ticks.tooltip": "初期フェーズの持続時間（ticks）。",
+
+  "config.frost_lava_walker.blackstone_main_ticks": "フェーズ2 - ブラックストーン",
+  "config.frost_lava_walker.blackstone_main_ticks.tooltip": "安定したメインフェーズの持続時間（ticks）。",
+
+  "config.frost_lava_walker.gilded_warning_ticks": "フェーズ3 - きらめくブラックストーン",
+  "config.frost_lava_walker.gilded_warning_ticks.tooltip": "変換前の警告フェーズ（ticks）。",
+
+  "config.frost_lava_walker.magma_short_ticks": "フェーズ4 - マグマブロック",
+  "config.frost_lava_walker.magma_short_ticks.tooltip": "マグマフェーズの持続時間（ticks）。",
+
+  "config.frost_lava_walker.cooldown_extra_ticks": "Cooldown",
+  "config.frost_lava_walker.cooldown_extra_ticks.tooltip": "再変換できないクールダウン時間（ticks）。"
+}

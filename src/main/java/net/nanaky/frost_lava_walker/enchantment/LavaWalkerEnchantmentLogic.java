@@ -1,6 +1,7 @@
 package net.nanaky.frost_lava_walker.enchantment;
 
 import net.nanaky.frost_lava_walker.util.Particle_Compat;
+import net.nanaky.frost_lava_walker.config.ConfigManager;
 import net.nanaky.frost_lava_walker.particle.LavaWalkerParticles;
 import net.nanaky.frost_lava_walker.util.BlockConversionScheduler;
 import net.nanaky.frost_lava_walker.util.LavaWalkerPersistentState;
@@ -25,16 +26,21 @@ import net.minecraft.world.phys.Vec3;
 
 public class LavaWalkerEnchantmentLogic {
 
-    private static final int GILDED_INITIAL_TICKS  = 3;      // Quick Gilded Flash Before Settling
-    private static final int BLACKSTONE_MAIN_TICKS  = 40;    // Main Safe State
-    private static final int GILDED_WARNING_TICKS   = 15;    // First Warning + FX
-    private static final int MAGMA_SHORT_TICKS      = 10;    // Second Warning
+    private static int GILDED_INITIAL_TICKS()  { return ConfigManager.INSTANCE.gildedInitialTicks; }  // Quick Gilded Flash Before Settling
+    private static int BLACKSTONE_MAIN_TICKS() { return ConfigManager.INSTANCE.blackstoneMainTicks; } // Main Safe State
+    private static int GILDED_WARNING_TICKS()  { return ConfigManager.INSTANCE.gildedWarningTicks; }  // First Warning + FX
+    private static int MAGMA_SHORT_TICKS()     { return ConfigManager.INSTANCE.magmaShortTicks; }     // Second Warning
     
-    private static final int TOTAL_LIFECYCLE_TICKS  =        // Allows each block to revert independently
-        GILDED_INITIAL_TICKS + BLACKSTONE_MAIN_TICKS + GILDED_WARNING_TICKS + MAGMA_SHORT_TICKS;
+    private static int TOTAL_LIFECYCLE_TICKS() {    // Allows each block to revert independently
+        return GILDED_INITIAL_TICKS()
+        + BLACKSTONE_MAIN_TICKS()
+        + GILDED_WARNING_TICKS()
+        + MAGMA_SHORT_TICKS();
+    }
 
-    private static final int CONVERSION_COOLDOWN_TICKS =     // Allows a short cooldown window for LAVA
-        TOTAL_LIFECYCLE_TICKS + 20;
+    private static int CONVERSION_COOLDOWN_TICKS() {     // Allows a short cooldown window for LAVA
+        return TOTAL_LIFECYCLE_TICKS() + ConfigManager.INSTANCE.cooldownExtraTicks;
+    }
 
     static final java.util.Map<BlockPos, Long> CONVERSION_COOLDOWN = new java.util.HashMap<>();
     static final java.util.Map<BlockPos, Long> CONVERSION_START = new java.util.HashMap<>();
@@ -45,8 +51,8 @@ public class LavaWalkerEnchantmentLogic {
     }
 
     public static void pruneConversionCooldown(long now) {
-        CONVERSION_COOLDOWN.entrySet().removeIf(e -> now - e.getValue() >= CONVERSION_COOLDOWN_TICKS);
-        CONVERSION_START.entrySet().removeIf(e -> now - e.getValue() >= TOTAL_LIFECYCLE_TICKS + 20);
+        CONVERSION_COOLDOWN.entrySet().removeIf(e -> now - e.getValue() >= CONVERSION_COOLDOWN_TICKS());
+        CONVERSION_START.entrySet().removeIf(e -> now - e.getValue() >= TOTAL_LIFECYCLE_TICKS() + 20);
     }
 
     public static void revertAllPendingToLava(ServerLevel level) {
@@ -86,14 +92,15 @@ public class LavaWalkerEnchantmentLogic {
         boolean movedBlock = last != null && !last.equals(center);
         boolean justLanded = entity.onGround() && entity.fallDistance > 0;
         
-        // NO TRIGGER IF NO ENCHANTMENT, NOT MOVING, IN LAVA OR IN THE AIR
+        // NO TRIGGER IF CONFIG OFF || NO ENCHANTMENT || NOT MOVING || IN LAVA || IN THE AIR
+        if (!ConfigManager.INSTANCE.lavaWalkerEnabled) return;
         if (enchantLevel <= 0) return;
         if (!movedBlock && !justLanded) return;
         if (entity.isInLava()) return;
         if (!entity.onGround()) return;
 
         BlockPos floor = entity.getOnPos();
-        int radius = enchantLevel;
+        int radius = ConfigManager.INSTANCE.baseRadius - 1 + enchantLevel;
         long now = level.getGameTime();
 
         for (BlockPos candidate : BlockPos.betweenClosed(
@@ -113,7 +120,7 @@ public class LavaWalkerEnchantmentLogic {
 
             // Skip if this block was converted recently
             Long lastConverted = CONVERSION_COOLDOWN.get(immutable);
-            if (lastConverted != null && now - lastConverted < CONVERSION_COOLDOWN_TICKS) continue;
+            if (lastConverted != null && now - lastConverted < CONVERSION_COOLDOWN_TICKS()) continue;
             CONVERSION_COOLDOWN.put(immutable, now);
             CONVERSION_START.putIfAbsent(immutable, now);
             LavaWalkerPersistentState.get(level).startTimes.putIfAbsent(immutable, System.currentTimeMillis());
@@ -121,13 +128,14 @@ public class LavaWalkerEnchantmentLogic {
 
             // Phase 1: lava -> GILDED_BLACKSTONE (quick flash)
             level.setBlock(immutable, Blocks.GILDED_BLACKSTONE.defaultBlockState(), 3);
-            spawnConversionEffects(level, immutable);
+            spawnConversionVFX(level, immutable);
+            spawnConversionSFX(level, immutable);
 
             // Schedule phase 2: GILDED_BLACKSTONE -> BLACKSTONE
             BlockConversionScheduler.schedule(
                 immutable,
                 Blocks.BLACKSTONE.defaultBlockState(),
-                GILDED_INITIAL_TICKS,
+                GILDED_INITIAL_TICKS(),
                 level.getGameTime(),
                 entity,
                 level
@@ -143,8 +151,8 @@ public class LavaWalkerEnchantmentLogic {
         // Phase 1: GILDED_BLACKSTONE (flash) → BLACKSTONE
         if (current.is(Blocks.GILDED_BLACKSTONE) && revertTo.is(Blocks.BLACKSTONE)) {
             level.setBlock(pos, Blocks.BLACKSTONE.defaultBlockState(), 3);
-            spawnSettleEffects(level, pos);
-            long warnAt  = START + GILDED_INITIAL_TICKS + BLACKSTONE_MAIN_TICKS;
+            spawnSettleVFX(level, pos);
+            long warnAt  = START + GILDED_INITIAL_TICKS() + BLACKSTONE_MAIN_TICKS();
             long delayTo = Math.max(1, warnAt - now);
             BlockConversionScheduler.schedule(pos, Blocks.GILDED_BLACKSTONE.defaultBlockState(),
                 (int) delayTo, now, entity, level);
@@ -154,8 +162,8 @@ public class LavaWalkerEnchantmentLogic {
         // Phase 2: BLACKSTONE → GILDED_BLACKSTONE (first warning)
         if (current.is(Blocks.BLACKSTONE)) {
             level.setBlock(pos, Blocks.GILDED_BLACKSTONE.defaultBlockState(), 3);
-            spawnFirstWarningEffects(level, pos);
-            long magmaAt = START + GILDED_INITIAL_TICKS + BLACKSTONE_MAIN_TICKS + GILDED_WARNING_TICKS;
+            spawnFirstWarningVFX(level, pos);
+            long magmaAt = START + GILDED_INITIAL_TICKS() + BLACKSTONE_MAIN_TICKS() + GILDED_WARNING_TICKS();
             long delayTo = Math.max(1, magmaAt - now);
             BlockConversionScheduler.schedule(pos, Blocks.MAGMA_BLOCK.defaultBlockState(),
                 (int) delayTo, now, entity, level);
@@ -165,8 +173,9 @@ public class LavaWalkerEnchantmentLogic {
         // Phase 3: GILDED_BLACKSTONE (warning) → MAGMA
         if (current.is(Blocks.GILDED_BLACKSTONE) && revertTo.is(Blocks.MAGMA_BLOCK)) {
             level.setBlock(pos, Blocks.MAGMA_BLOCK.defaultBlockState(), 3);
-            spawnRevertEffects(level, pos);
-            long lavaAt  = START + GILDED_INITIAL_TICKS + BLACKSTONE_MAIN_TICKS + GILDED_WARNING_TICKS + MAGMA_SHORT_TICKS;
+            spawnRevertVFX(level, pos);
+            spawnRevertSFX(level, pos);
+            long lavaAt  = START + GILDED_INITIAL_TICKS() + BLACKSTONE_MAIN_TICKS() + GILDED_WARNING_TICKS() + MAGMA_SHORT_TICKS();
             long delayTo = Math.max(1, lavaAt - now);
             BlockConversionScheduler.schedule(pos, getLavaBlockState(pos, level),
                 (int) delayTo, now, entity, level);
@@ -195,25 +204,31 @@ public class LavaWalkerEnchantmentLogic {
     // ── Effects ───────────────────────────────────────────────────────────────
 
     // lava → GILDED_BLACKSTONE (initial conversion)
-    private static void spawnConversionEffects(ServerLevel level, BlockPos pos) {
+    private static void spawnConversionVFX(ServerLevel level, BlockPos pos) {
+        if (!ConfigManager.INSTANCE.showParticles) return;
         Vec3 center = Vec3.atCenterOf(pos);
         level.sendParticles(ParticleTypes.WHITE_SMOKE,
             center.x, center.y + 0.5, center.z, 3, 0.2, 0.1, 0.2, 0.01);
         level.sendParticles(ParticleTypes.SMOKE,
             center.x, center.y + 0.25, center.z, 1, 0.1, 0.05, 0.1, 0.05);
+    }
+    private static void spawnConversionSFX(ServerLevel level, BlockPos pos) {
+        if (!ConfigManager.INSTANCE.playSoundEffects) return;
         level.playSound(null, pos, SoundEvents.MAGMA_CUBE_DEATH,
             SoundSource.BLOCKS, 0.5f, 0.5f);
     }
 
     // GILDED_BLACKSTONE → BLACKSTONE (settling)
-    private static void spawnSettleEffects(ServerLevel level, BlockPos pos) {
+    private static void spawnSettleVFX(ServerLevel level, BlockPos pos) {
+        if (!ConfigManager.INSTANCE.showParticles) return;
         Vec3 center = Vec3.atCenterOf(pos);
         level.sendParticles(ParticleTypes.SMOKE,
             center.x, center.y + 1, center.z, 4, 0.2, 0.05, 0.2, 0.01);
     }
 
     // BLACKSTONE → GILDED_BLACKSTONE (first warning)
-    private static void spawnFirstWarningEffects(ServerLevel level, BlockPos pos) {
+    private static void spawnFirstWarningVFX(ServerLevel level, BlockPos pos) {
+        if (!ConfigManager.INSTANCE.showParticles) return;
         Vec3 center = Vec3.atCenterOf(pos);
         level.sendParticles(LavaWalkerParticles.LAVA_POP,
             center.x, center.y + 0.5, center.z, 4, 0.2, 0.1, 0.2, 0.02);
@@ -222,12 +237,16 @@ public class LavaWalkerEnchantmentLogic {
     }
 
     // MAGMA → lava (final revert)
-    private static void spawnRevertEffects(ServerLevel level, BlockPos pos) {
+    private static void spawnRevertVFX(ServerLevel level, BlockPos pos) {
+        if (!ConfigManager.INSTANCE.showParticles) return;
         Vec3 center = Vec3.atCenterOf(pos);
         level.sendParticles(ParticleTypes.SMALL_FLAME,
             center.x, center.y + 0.5, center.z, 2, 0.1, 0.05, 0.1, 0.01);
         level.sendParticles(ParticleTypes.SMOKE,
             center.x, center.y + 0.5, center.z, 15, 0.2, 0.1, 0.2, 0.05);
+    }
+    private static void spawnRevertSFX(ServerLevel level, BlockPos pos) {
+        if (!ConfigManager.INSTANCE.playSoundEffects) return;
         level.playSound(null, pos, SoundEvents.LAVA_EXTINGUISH,
             SoundSource.BLOCKS, 0.2f, 0.9f);
     }

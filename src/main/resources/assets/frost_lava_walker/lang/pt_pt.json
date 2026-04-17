@@ -1,0 +1,32 @@
+{
+  "config.frost_lava_walker.title": "Frost Lava Walker – Konfiguracja",
+  "config.frost_lava_walker.category.client": "Klient",
+  "config.frost_lava_walker.category.server": "Serwer",
+
+  "config.frost_lava_walker.show_particles": "Pokaż cząsteczki",
+  "config.frost_lava_walker.show_particles.tooltip": "Pokazuje cząsteczki podczas konwersji bloków. Wyłącz jeśli występują lagi.",
+
+  "config.frost_lava_walker.play_sound_effects": "Odtwarzaj efekty dźwiękowe",
+  "config.frost_lava_walker.play_sound_effects.tooltip": "Odtwarza dźwięki podczas konwersji bloków. Wyłącz jeśli występują lagi.",
+
+  "config.frost_lava_walker.lava_walker_enabled": "Activation Lava Walker",
+  "config.frost_lava_walker.lava_walker_enabled.tooltip": "Włącza lub wyłącza Lava Walker.",
+
+  "config.frost_lava_walker.base_radius": "Promień bazowy",
+  "config.frost_lava_walker.base_radius.tooltip": "Promień Lava Walker w blokach. Poziom zaklęcia jest dodawany.",
+
+  "config.frost_lava_walker.gilded_initial_ticks": "Faza 1 - Złocony czernit",
+  "config.frost_lava_walker.gilded_initial_ticks.tooltip": "Czas trwania fazy początkowej.",
+
+  "config.frost_lava_walker.blackstone_main_ticks": "Faza 2 - Czernit",
+  "config.frost_lava_walker.blackstone_main_ticks.tooltip": "Czas trwania głównej stabilnej fazy.",
+
+  "config.frost_lava_walker.gilded_warning_ticks": "Faza 3 - Złocony czernit",
+  "config.frost_lava_walker.gilded_warning_ticks.tooltip": "Faza ostrzegawcza przed ponowną konwersją.",
+
+  "config.frost_lava_walker.magma_short_ticks": "Faza 4 - Blok magmy",
+  "config.frost_lava_walker.magma_short_ticks.tooltip": "Czas trwania fazy magmy.",
+
+  "config.frost_lava_walker.cooldown_extra_ticks": "Cooldown",
+  "config.frost_lava_walker.cooldown_extra_ticks.tooltip": "Ticks, w których lawa nie może zostać ponownie przekształcona."
+}

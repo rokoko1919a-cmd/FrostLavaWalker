@@ -1,0 +1,32 @@
+{
+  "config.frost_lava_walker.title": "Frost Lava Walker – Настройки",
+  "config.frost_lava_walker.category.client": "Клиент",
+  "config.frost_lava_walker.category.server": "Сервер",
+
+  "config.frost_lava_walker.show_particles": "Показывать частицы",
+  "config.frost_lava_walker.show_particles.tooltip": "Показывает частицы при конверсии блоков. Отключите при лагах.",
+
+  "config.frost_lava_walker.play_sound_effects": "Включить звуковые эффекты",
+  "config.frost_lava_walker.play_sound_effects.tooltip": "Проигрывает звуки при конверсии блоков. Отключите при лагах.",
+
+  "config.frost_lava_walker.lava_walker_enabled": "Activation Lava Walker",
+  "config.frost_lava_walker.lava_walker_enabled.tooltip": "Включает или отключает Lava Walker.",
+
+  "config.frost_lava_walker.base_radius": "Базовый радиус",
+  "config.frost_lava_walker.base_radius.tooltip": "Радиус Lava Walker в блоках. Уровень зачарования добавляется.",
+
+  "config.frost_lava_walker.gilded_initial_ticks": "Фаза 1 - Позолоченный чернокамень",
+  "config.frost_lava_walker.gilded_initial_ticks.tooltip": "Длительность начальной фазы.",
+
+  "config.frost_lava_walker.blackstone_main_ticks": "Фаза 2 - Чернокамень",
+  "config.frost_lava_walker.blackstone_main_ticks.tooltip": "Длительность основной стабильной фазы.",
+
+  "config.frost_lava_walker.gilded_warning_ticks": "Фаза 3 - Позолоченный чернокамень",
+  "config.frost_lava_walker.gilded_warning_ticks.tooltip": "Предупреждающая фаза перед конверсией.",
+
+  "config.frost_lava_walker.magma_short_ticks": "Фаза 4 - Блок магмы",
+  "config.frost_lava_walker.magma_short_ticks.tooltip": "Длительность фазы магмы.",
+
+  "config.frost_lava_walker.cooldown_extra_ticks": "Cooldown",
+  "config.frost_lava_walker.cooldown_extra_ticks.tooltip": "Ticks, в течение которых лава не может быть снова преобразована."
+}

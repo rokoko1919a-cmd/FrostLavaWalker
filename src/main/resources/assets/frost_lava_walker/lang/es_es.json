@@ -1,0 +1,32 @@
+{
+  "config.frost_lava_walker.title": "Frost Lava Walker – Configuración",
+  "config.frost_lava_walker.category.client": "Cliente",
+  "config.frost_lava_walker.category.server": "Servidor",
+
+  "config.frost_lava_walker.show_particles": "Mostrar partículas",
+  "config.frost_lava_walker.show_particles.tooltip": "Muestra partículas al convertir bloques. Desactiva si hay lag.",
+
+  "config.frost_lava_walker.play_sound_effects": "Reproducir efectos de sonido",
+  "config.frost_lava_walker.play_sound_effects.tooltip": "Reproduce sonidos al convertir bloques. Desactiva si hay lag.",
+
+  "config.frost_lava_walker.lava_walker_enabled": "Activación Lava Walker",
+  "config.frost_lava_walker.lava_walker_enabled.tooltip": "Activa o desactiva Lava Walker.",
+
+  "config.frost_lava_walker.base_radius": "Radio base",
+  "config.frost_lava_walker.base_radius.tooltip": "Radio de Lava Walker en bloques. El nivel de encantamiento se suma.",
+
+  "config.frost_lava_walker.gilded_initial_ticks": "Fase 1 - Piedra negra áurea",
+  "config.frost_lava_walker.gilded_initial_ticks.tooltip": "Duración de la primera fase.",
+
+  "config.frost_lava_walker.blackstone_main_ticks": "Fase 2 - Piedra negra",
+  "config.frost_lava_walker.blackstone_main_ticks.tooltip": "Duración de la fase estable principal.",
+
+  "config.frost_lava_walker.gilded_warning_ticks": "Fase 3 - Piedra negra áurea",
+  "config.frost_lava_walker.gilded_warning_ticks.tooltip": "Fase de advertencia antes de reconversión.",
+
+  "config.frost_lava_walker.magma_short_ticks": "Fase 4 - Bloque de magma",
+  "config.frost_lava_walker.magma_short_ticks.tooltip": "Duración de la fase de magma.",
+
+  "config.frost_lava_walker.cooldown_extra_ticks": "Cooldown",
+  "config.frost_lava_walker.cooldown_extra_ticks.tooltip": "Ticks durante los cuales la lava no puede reconvertirse."
+}

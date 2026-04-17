@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.nanaky.frost_lava_walker.config.ConfigManager;
 import net.nanaky.frost_lava_walker.enchantment.LavaWalkerEnchantmentLogic;
 import net.nanaky.frost_lava_walker.network.SpawnParticlePacket;
 import net.nanaky.frost_lava_walker.particle.LavaWalkerParticles;
@@ -16,6 +17,7 @@ public class LavaWalkerMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        ConfigManager.load();
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             for (ServerLevel level : server.getAllLevels()) {
                 LavaWalkerEnchantmentLogic.revertAllPendingToLava(level);
